@@ -1,4 +1,4 @@
-package SQL_Commands;
+package SQL.Commands;
 
 import Persistence.ConnectionUtil;
 
@@ -11,14 +11,25 @@ public enum Commands {
      */
 
     // You can select which table to insert, select, update and delete
-    CREATE(data -> ConnectionUtil.executeUpdate("INSERT INTO ? VALUES (?, ?, ?)", data)),
-    READ(data -> ConnectionUtil.executeSelect("SELECT * FROM ? WHERE id = ?", data)),
+    CREATE_NEW_AUTHOR(data ->{
+        String sql = "INSERT INTO authors (name) VALUES ?";
+
+        return ConnectionUtil.executeUpdate(sql, data);
+    })
+    ,
+    CREATE_NEW_BOOK(data -> {
+        String sql = "INSERT INTO books (title, quantity, release_date) VALUES (?, ?, ?)";
+        return ConnectionUtil.executeUpdate(sql, data);
+    }),
+
+
     UPDATE(data -> ConnectionUtil.executeUpdate("UPDATE ? SET column1 = ?, column2 = ? WHERE id = ?", data)),
+
     DELETE(data -> ConnectionUtil.executeUpdate("DELETE FROM ? WHERE id = ?", data));
 
-    private final ExecuteCommands executor;
+    private final ExecuteUpdate executor;
 
-    Commands(ExecuteCommands executor) {
+    Commands(ExecuteUpdate executor) {
         this.executor = executor;
     }
 

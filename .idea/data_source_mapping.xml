@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migration/V202608151252__create_tables.sql" value="76d6334a-5a99-4a95-90eb-ec80f03ad7a6" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db.migration/V202608250804__insert_data.sql" value="76d6334a-5a99-4a95-90eb-ec80f03ad7a6" />
+  </component>
+</project>

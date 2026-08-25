@@ -2,9 +2,11 @@ package Persistence;
 
 import lombok.NoArgsConstructor;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -16,12 +18,58 @@ public class ConnectionUtil {
             return DriverManager.getConnection("jdbc:postgresql://localhost:5432/biblioteca", "postgres", "postgres");
         }
 
-    public static int executeUpdate(String s, String[] data) {
+    public static int executeUpdate(String query, String[] data) {
         // Implementation for executing update statements
-        return 0;
+        try (
+                Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)
+        ) {
+
+            for (int i = 0; i < data.length; i++) {
+                statement.setString(i + 1, data[i]);
+            }
+
+            return statement.executeUpdate();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static int executeSelect(String query, String[] data) {
-        return 0;
+    public static List<Map<String, Object>> executeSelect(String query, String[] data) {
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        try (
+                Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)
+        ) {
+
+            for (int i = 0; i < data.length; i++) {
+                statement.setString(i + 1, data[i]);
+            }
+
+            ResultSet resultSet = statement.executeQuery();
+
+            ResultSetMetaData metadata = resultSet.getMetaData();
+            int columnCount = metadata.getColumnCount();
+
+            while (resultSet.next()) {
+                Map<String, Object> row = new HashMap<>();
+
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = metadata.getColumnName(i);
+                    Object value = resultSet.getObject(i);
+
+                    row.put(columnName, value);
+                }
+
+                result.add(row);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
     }
 }
