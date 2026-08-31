@@ -18,7 +18,17 @@ public enum ExecuteQueries {
         return ConnectionUtil.executeSelect(sql, data);
     }),
 
-    READ(data -> ConnectionUtil.executeSelect("SELECT * FROM ? WHERE id = ?", data));
+    SHOW_ALL_AUTHORS(data -> ConnectionUtil.executeSelect("SELECT * FROM authors", data)),
+
+    SHOW_ALL_BOOKS(data -> {
+       return ConnectionUtil.executeSelect("SELECT title, quantity, release_date FROM books ORDER BY title", data);
+    }),
+
+    SHOW_AUTHOR_FOR_ID (data -> {
+        return ConnectionUtil.executeSelect("SELECT * FROM authors WHERE author_id = ?", data);
+    });
+
+
 
     private final ExecuteSelect executor;
 
@@ -26,7 +36,7 @@ public enum ExecuteQueries {
         this.executor = executor;
     }
 
-    public List<Map<String, Object>> execute(String... data) {
+    public List<Map<String, Object>> execute(Object... data) {
         return executor.exec(data);
     }
 }
