@@ -1,12 +1,8 @@
 package Persistence;
 
 import lombok.NoArgsConstructor;
-
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -18,7 +14,7 @@ public class ConnectionUtil {
             return DriverManager.getConnection("jdbc:postgresql://localhost:5432/biblioteca", "postgres", "postgres");
         }
 
-    public static int executeUpdate(String query, String[] data) {
+    public static int executeUpdate(String query, Object[] data) {
         // Implementation for executing update statements
         try (
                 Connection connection = getConnection();
@@ -26,7 +22,7 @@ public class ConnectionUtil {
         ) {
 
             for (int i = 0; i < data.length; i++) {
-                statement.setString(i + 1, data[i]);
+                statement.setObject(i + 1, data[i]);
             }
 
             return statement.executeUpdate();
@@ -36,7 +32,7 @@ public class ConnectionUtil {
         }
     }
 
-    public static List<Map<String, Object>> executeSelect(String query, String[] data) {
+    public static List<Map<String, Object>> executeSelect(String query, Object... data) {
         List<Map<String, Object>> result = new ArrayList<>();
 
         try (
@@ -45,7 +41,7 @@ public class ConnectionUtil {
         ) {
 
             for (int i = 0; i < data.length; i++) {
-                statement.setString(i + 1, data[i]);
+                statement.setObject(i + 1, data[i]);
             }
 
             ResultSet resultSet = statement.executeQuery();
@@ -54,7 +50,7 @@ public class ConnectionUtil {
             int columnCount = metadata.getColumnCount();
 
             while (resultSet.next()) {
-                Map<String, Object> row = new HashMap<>();
+                Map<String, Object> row = new LinkedHashMap<>();
 
                 for (int i = 1; i <= columnCount; i++) {
                     String columnName = metadata.getColumnName(i);
