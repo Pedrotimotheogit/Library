@@ -4,5 +4,5 @@ import java.util.Map;
 
 @FunctionalInterface
 public interface ExecuteSelect {
-    List<Map<String, Object>> exec(String... data);
+    List<Map<String, Object>> exec(Object... data);
 }
