@@ -2,5 +2,5 @@ package SQL.Commands;
 
 @FunctionalInterface
 public interface ExecuteUpdate {
-    int exec(String... data);
+    int exec(Object... data);
 }
