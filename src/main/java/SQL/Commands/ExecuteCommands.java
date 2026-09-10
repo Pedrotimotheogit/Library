@@ -1,6 +1,6 @@
 package SQL.Commands;
 
 @FunctionalInterface
-public interface ExecuteUpdate {
+public interface ExecuteCommands {
     int exec(Object... data);
 }
