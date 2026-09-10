@@ -6,19 +6,17 @@ import java.util.Scanner;
 
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchFieldException {
         Scanner scanner = new Scanner(System.in);
         //Try to connect to the database
         try (var connection = ConnectionUtil.getConnection()){
             System.out.println("Connection established successfully.");
+
+            var flyway = Flyway.configure().dataSource("jdbc:postgresql://localhost:5432/biblioteca", "postgres", "postgres").schemas("public").load();
+            flyway.migrate();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-        var flyway = Flyway.configure().dataSource("jdbc:postgresql://localhost:5432/biblioteca", "postgres", "postgres").load();
-        flyway.migrate();
-
-        Menu menu = new Menu();
-        menu.showMenu(scanner);
+        Menu menu = new Menu(scanner);
     }
 }
