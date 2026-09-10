@@ -1,5 +1,5 @@
 
-INSERT INTO authors (name)
+INSERT INTO authors (author_name)
 VALUES
     ('J. R. R. Tolkien'),
     ('George Orwell'),
@@ -43,7 +43,7 @@ VALUES
     (10, 10);
 
 
-INSERT INTO readers (name)
+INSERT INTO readers (reader_name)
 VALUES
     ('João Silva'),
     ('Maria Souza'),
