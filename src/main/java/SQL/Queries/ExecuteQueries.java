@@ -1,8 +1,8 @@
 package SQL.Queries;
 
 import Persistence.ConnectionUtil;
-import SQL.Commands.ExecuteUpdate;
 
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,15 +18,19 @@ public enum ExecuteQueries {
         return ConnectionUtil.executeSelect(sql, data);
     }),
 
+    SHOW_ALL_BORROWED_BOOKS (data -> ConnectionUtil.executeSelect("SELECT * FROM borrowed_books", data)),
+
     SHOW_ALL_AUTHORS(data -> ConnectionUtil.executeSelect("SELECT * FROM authors", data)),
 
     SHOW_ALL_BOOKS(data -> {
-       return ConnectionUtil.executeSelect("SELECT title, quantity, release_date FROM books ORDER BY title", data);
+       return ConnectionUtil.executeSelect("SELECT book_id, title, quantity, release_date FROM books ORDER BY book_id", data);
     }),
 
     SHOW_AUTHOR_FOR_ID (data -> {
         return ConnectionUtil.executeSelect("SELECT * FROM authors WHERE author_id = ?", data);
-    });
+    }),
+
+    SHOW_ALL_READERS(data -> ConnectionUtil.executeSelect("SELECT * FROM readers"));
 
 
 
