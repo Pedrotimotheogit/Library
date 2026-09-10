@@ -12,7 +12,7 @@ public enum Commands {
 
     //Create new Author, book or reader
     CREATE_NEW_AUTHOR(data ->{
-        String sql = "INSERT INTO authors (name) VALUES ?";
+        String sql = "INSERT INTO authors (author_name) VALUES (?)";
 
         return ConnectionUtil.executeUpdate(sql, data);
     })
@@ -35,20 +35,24 @@ public enum Commands {
 
     UPDATE_BOOK_RELEASE_DATE(data -> ConnectionUtil.executeUpdate("UPDATE books SET release_date = ? WHERE book_id = ?", data)),
 
+    UPDATE_BOOK_AUTHORS(data -> ConnectionUtil.executeUpdate("INSERT INTO book_authors (book_id, author_id) VALUES (?, ?)", data)),
+
     //Update Authors
     UPDATE_AUTHOR_NAME(data -> ConnectionUtil.executeUpdate("UPDATE authors SET author_name = ? WHERE author_id = ?", data)),
 
     //Update Readers
     UPDATE_READER_NAME(data -> ConnectionUtil.executeUpdate("UPDATE readers SET reader_name = ? WHERE reader_id = ?", data)),
 
+    UPDATE_BORROWED_BOOK(data -> ConnectionUtil.executeUpdate("UPDATE borrowed_books SET return_date = ? WHERE book_id = ? AND reader_id = ?", data)),
+
     //Deletes
     DELETE_BOOK(data -> ConnectionUtil.executeUpdate("DELETE FROM books WHERE book_id = ?", data)),
     DELETE_AUTHOR(data -> ConnectionUtil.executeUpdate("DELETE FROM authors WHERE author_id = ?", data)),
     DELETE_READER(data -> ConnectionUtil.executeUpdate("DELETE FROM readers WHERE reader_id = ?", data));
 
-    private final ExecuteUpdate executor;
+    private final ExecuteCommands executor;
 
-    Commands(ExecuteUpdate executor) {
+    Commands(ExecuteCommands executor) {
         this.executor = executor;
     }
 
